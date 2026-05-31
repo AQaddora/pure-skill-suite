@@ -22,7 +22,7 @@ cd pure-skill-suite
 ./skills/install.sh
 ```
 
-The installer creates `~/ai-doctrine.md`, installs all 8 skills into `~/.claude/skills/`, and (optionally) wires the doctrine into your current project so every AI tool reads the same memory.
+The installer creates `~/ai-doctrine.md`, installs all 11 skills into `~/.claude/skills/`, and (optionally) wires the doctrine into your current project so every AI tool reads the same memory.
 
 Once installed, in Claude (or any tool that reads `~/.claude/skills/`):
 
@@ -39,7 +39,7 @@ Open Cursor or Copilot in the same project — they pick up the same rules from 
 
 ## The skills
 
-Eight skills. Each has its own `SKILL.md` inside [`skills/<name>/`](skills/) — those are the canonical specs the AI reads. The summaries below are for humans browsing the repo.
+Eleven skills. Each has its own `SKILL.md` inside [`skills/<name>/`](skills/) — those are the canonical specs the AI reads. The summaries below are for humans browsing the repo.
 
 ### Prime
 
@@ -104,6 +104,30 @@ Maintains a registry of agent runs and outputs across every coding agent you wor
 **Triggers** on *"list agents"*, *"show recent runs"*, *"agent status"*, *"what's in flight"*.
 
 → [`skills/organize-agents/SKILL.md`](skills/organize-agents/SKILL.md)
+
+### Handoff Receiver
+
+The receiving half of `handoff`. Boots a fresh agent loaded from a handoff bundle: reads the bundle README + manifest, primes from it, confirms locked decisions before writing code, and refuses to start on a bundle with no mission.
+
+**Triggers** on *"read this handoff"*, *"take over from this bundle"*, *"you're picking up X"*, *"continue this work"*, or a handoff block as the first message.
+
+→ [`skills/handoff-receiver/SKILL.md`](skills/handoff-receiver/SKILL.md)
+
+### Report Back
+
+The mandatory completion-report skill. When an agent finishes (or is blocked on) a task, it writes the outcome to **files** — never only to chat. Produces a `<bundle>-shipped/handoff.md` (fixed schema) and sets the source `manifest.json` status to `shipped · <SHA>` or `blocked · <reason>`.
+
+**Triggers** on *"I'm done"*, *"this is shipped"*, *"wrap up"*, *"I'm blocked"*, or automatically at the end of any `handoff-receiver` / `execute` run.
+
+→ [`skills/report-back/SKILL.md`](skills/report-back/SKILL.md)
+
+### Status Beacon
+
+Lightweight mid-flight progress logging for long agent runs. Where `report-back` writes the final outcome, status-beacon appends short, timestamped notes to a `progress.md` *during* the work so a human or orchestrator can check in without interrupting.
+
+**Triggers** on *"keep a log"*, *"leave progress notes"*, *"beacon this"*, *"let me track this"*, or any long multi-phase run.
+
+→ [`skills/status-beacon/SKILL.md`](skills/status-beacon/SKILL.md)
 
 ---
 

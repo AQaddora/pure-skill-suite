@@ -1,6 +1,6 @@
 # Skills — The PURE + AI Doctrine Skill Suite
 
-Eight AI coding skills that work together as a **cross-tool memory and operating system** for developers using Claude, Cursor, Copilot, Codex, Gemini CLI, Aider, and Windsurf.
+Eleven AI coding skills that work together as a **cross-tool memory and operating system** for developers using Claude, Cursor, Copilot, Codex, Gemini CLI, Aider, and Windsurf.
 
 Invented and maintained by [Ahmed Qaddoura](https://aqaddoura.com).
 
@@ -9,18 +9,18 @@ Invented and maintained by [Ahmed Qaddoura](https://aqaddoura.com).
 From the repo root:
 
 ```bash
-git clone https://github.com/AQaddora/vibe-coding-mastery.git
-cd vibe-coding-mastery
+git clone https://github.com/AQaddora/pure-skill-suite.git
+cd pure-skill-suite
 ./skills/install.sh
 ```
 
 The installer:
 
 1. Bootstraps `~/ai-doctrine.md` (your personal rulebook — written once, grown forever)
-2. Installs all 7 skills into `~/.claude/skills/`
+2. Installs all 11 skills into `~/.claude/skills/`
 3. Optionally wires the doctrine into your current project so every AI tool reads it
 
-## The 8 skills
+## The 11 skills
 
 | # | Skill | One-line purpose | Status |
 | --- | --- | --- | --- |
@@ -32,6 +32,9 @@ The installer:
 | 6 | [`organize-agents`](organize-agents/SKILL.md) | Registry of agent runs across every tool you use. | 🧱 Skeleton |
 | 7 | [`pure-orchestrator`](pure-orchestrator/SKILL.md) | Runs the full P→U→R→E loop end-to-end with user checkpoints. | 🧱 Skeleton |
 | 8 | [`handoff`](handoff/SKILL.md) | Migrates a long session to a fresh chat without losing state. | 🧱 Skeleton |
+| 9 | [`handoff-receiver`](handoff-receiver/SKILL.md) | The receiving half of `handoff` — boots a fresh agent loaded from a bundle. | ✅ Final |
+| 10 | [`report-back`](report-back/SKILL.md) | Mandatory completion report to files (`-shipped/handoff.md` + manifest status). | ✅ Final |
+| 11 | [`status-beacon`](status-beacon/SKILL.md) | Append-only mid-flight progress notes for long agent runs. | ✅ Final |
 
 Skeleton = structure + descriptions + protocol are final. Scripts and helper logic are being built in dedicated sessions and shipped progressively.
 
