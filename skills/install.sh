@@ -72,6 +72,7 @@ SKILLS=(
     "status-beacon"
     "3d-modeler"
     "montage-creator"
+    "escalate-blocked"
 )
 
 # ─── Colors (terminal-aware) ─────────────────────────────────────────────────
