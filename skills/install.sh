@@ -5,14 +5,14 @@
 # What this does:
 #
 #   1. Creates ~/ai-doctrine.md (your master doctrine — the cross-tool memory)
-#   2. Installs all 8 PURE + AI Doctrine skills into ~/.claude/skills/
+#   2. Installs all 13 PURE + AI Doctrine skills into ~/.claude/skills/
 #   3. Makes scripts executable
 #   4. Offers to wire the doctrine into your current project (CLAUDE.md,
 #      .cursorrules, AGENTS.md, .github/copilot-instructions.md, .windsurfrules)
 #      so Cursor / Copilot / Codex / Gemini / Windsurf all read the same memory
 #   5. Verifies everything
 #
-# The 8 skills:
+# The 13 skills:
 #   doctrine-keeper      → write head (the memory bus)
 #   prime                → P of PURE — build a primer from your stack + doctrine
 #   understand           → U of PURE — clarify scope before code
@@ -21,6 +21,11 @@
 #   organize-agents      → registry of agent runs across tools
 #   pure-orchestrator    → runs the full P→U→R→E loop with checkpoints
 #   handoff              → migrates a long session to a fresh chat without losing state
+#   handoff-receiver     → boots a fresh agent from a handoff bundle
+#   report-back          → mandatory completion report written to files
+#   status-beacon        → mid-flight progress logging for long runs
+#   3d-modeler           → 3D interior models from photos into Mapbox GL
+#   montage-creator      → dynamic video montages for social distribution
 #
 # Run from the skills/ folder:
 #   ./install.sh                        # default install
@@ -52,7 +57,7 @@ SKILLS_DIR="$SCRIPT_DIR"
 CLAUDE_SKILLS_HOME="$HOME/.claude/skills"
 DOCTRINE_PATH="$HOME/ai-doctrine.md"
 
-# All 8 skills, in install order (doctrine-keeper first — others depend on it)
+# All 13 skills, in install order (doctrine-keeper first — others depend on it)
 SKILLS=(
     "doctrine-keeper"
     "prime"
@@ -62,6 +67,11 @@ SKILLS=(
     "organize-agents"
     "pure-orchestrator"
     "handoff"
+    "handoff-receiver"
+    "report-back"
+    "status-beacon"
+    "3d-modeler"
+    "montage-creator"
 )
 
 # ─── Colors (terminal-aware) ─────────────────────────────────────────────────
@@ -122,8 +132,8 @@ else
     ok "Created $DOCTRINE_PATH"
 fi
 
-# ─── Step 3: Install all 7 skills ────────────────────────────────────────────
-section "3/5 · Install 8 skills into Claude (~/.claude/skills/)"
+# ─── Step 3: Install all skills ──────────────────────────────────────────────
+section "3/5 · Install 13 skills into Claude (~/.claude/skills/)"
 
 mkdir -p "$CLAUDE_SKILLS_HOME"
 
