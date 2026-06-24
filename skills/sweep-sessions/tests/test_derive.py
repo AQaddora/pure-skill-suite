@@ -71,5 +71,71 @@ class TestNaming(unittest.TestCase):
         self.assertEqual(derive.make_title("build", "radx · explore tab"), "🛠 radx · explore tab")
 
 
+class TestDeriveRow(unittest.TestCase):
+    def test_skip_clean_fresh(self):
+        row = {"session_key": "maestro-x", "title": "[steer] Ahmed Jaber PRs",
+               "status": "active", "last_seen": at(-60)}
+        p = derive.derive_row(row, NOW)
+        self.assertEqual(p["action"], "skip")
+        self.assertIsNone(p["title"])
+
+    def test_clean_but_stale_goes_idle_keeps_name(self):
+        row = {"session_key": "maestro-x", "title": "[steer] Ahmed Jaber PRs",
+               "status": "active", "last_seen": at(-3 * 3600)}
+        p = derive.derive_row(row, NOW)
+        self.assertEqual(p["action"], "idle")
+        self.assertEqual(p["status"], "idle")
+        self.assertIsNone(p["title"])  # never clobber the good name
+
+    def test_structured_rename(self):
+        row = {"session_key": "claude:abc", "title": None, "repo": "taqat-academy",
+               "branch": "feat/seo-og-metadata", "machine": "here",
+               "status": "active", "last_seen": at(-60)}
+        p = derive.derive_row(row, NOW)
+        self.assertEqual(p["action"], "rename")
+        self.assertEqual(p["title"], "🛠 taqat-academy · SEO OG metadata")
+        self.assertIn("tags: brightgaza · feat", p["summary"])
+        self.assertIsNone(p["status"])  # fresh ⇒ leave status
+
+    def test_structured_stale_rename_and_idle(self):
+        row = {"session_key": "claude:abc", "title": None, "repo": "radx",
+               "branch": "feature/explore-tab", "machine": "here",
+               "status": "active", "last_seen": at(-5 * 3600)}
+        p = derive.derive_row(row, NOW)
+        self.assertEqual(p["action"], "rename")
+        self.assertEqual(p["status"], "idle")
+
+    def test_bare_null_fresh_is_peek(self):
+        row = {"session_key": "claude:abc", "title": None, "repo": None,
+               "machine": "here", "status": "active", "last_seen": at(-120)}
+        p = derive.derive_row(row, NOW)
+        self.assertEqual(p["action"], "peek")
+        self.assertIsNone(p["title"])
+
+    def test_bare_null_stale_is_idle_noise(self):
+        row = {"session_key": "claude:abc", "title": None, "repo": None,
+               "machine": "here", "status": "active", "last_seen": at(-9 * 3600)}
+        p = derive.derive_row(row, NOW)
+        self.assertEqual(p["action"], "idle")
+        self.assertEqual(p["title"], "💤 idle-noise")
+        self.assertEqual(p["status"], "idle")
+
+    def test_idempotent_rename_output_is_clean(self):
+        # feed a renamed row back in → it now has a clean title → skip
+        renamed = {"session_key": "claude:abc", "title": "🛠 taqat-academy · SEO OG metadata",
+                   "repo": "taqat-academy", "branch": "feat/seo-og-metadata",
+                   "status": "active", "last_seen": at(-60)}
+        p = derive.derive_row(renamed, NOW)
+        self.assertEqual(p["action"], "skip")
+
+    def test_derive_all_wraps_plans(self):
+        payload = {"sessions": [
+            {"session_key": "maestro-x", "title": "good", "last_seen": at(-60), "status": "active"},
+        ]}
+        out = derive.derive_all(payload, NOW)
+        self.assertEqual(len(out["plans"]), 1)
+        self.assertEqual(out["plans"][0]["action"], "skip")
+
+
 if __name__ == "__main__":
     unittest.main()
