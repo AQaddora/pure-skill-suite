@@ -57,7 +57,7 @@ SKILLS_DIR="$SCRIPT_DIR"
 CLAUDE_SKILLS_HOME="$HOME/.claude/skills"
 DOCTRINE_PATH="$HOME/ai-doctrine.md"
 
-# All 13 skills, in install order (doctrine-keeper first — others depend on it)
+# All 14 skills, in install order (doctrine-keeper first — others depend on it)
 SKILLS=(
     "doctrine-keeper"
     "prime"
@@ -72,6 +72,7 @@ SKILLS=(
     "status-beacon"
     "3d-modeler"
     "montage-creator"
+    "sweep-sessions"
 )
 
 # ─── Colors (terminal-aware) ─────────────────────────────────────────────────

@@ -51,7 +51,7 @@ cmd_sweep() {
   local now_arg=()
   [ -n "$now" ] && now_arg=(--now "$now")
   local plans
-  plans="$(printf '%s' "$roster" | python3 "$HERE/derive.py" "${now_arg[@]}")"
+  plans="$(printf '%s' "$roster" | python3 "$HERE/derive.py" ${now_arg[@]+"${now_arg[@]}"})"
 
   local peek_out="${SWEEP_PEEK_OUT:-/tmp/sweep-peek.json}"
   local n=0 r=0 i=0 s=0 p=0
