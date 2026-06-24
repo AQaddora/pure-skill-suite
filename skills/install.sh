@@ -73,6 +73,7 @@ SKILLS=(
     "3d-modeler"
     "montage-creator"
     "escalate-blocked"
+    "maestro-sync"
 )
 
 # ─── Colors (terminal-aware) ─────────────────────────────────────────────────
