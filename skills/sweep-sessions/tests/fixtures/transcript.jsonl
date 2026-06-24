@@ -1,0 +1,2 @@
+{"type":"user","message":{"content":"help me fix the wa inbound history loader, it loads oldest N not recent N"}}
+{"type":"assistant","message":{"content":[{"type":"text","text":"Found it — ORDER BY id ASC LIMIT N. Switching to DESC then re-ordering ASC."}]}}
