@@ -46,3 +46,97 @@ def is_fresh(row, now_epoch, minutes=FRESH_MIN):
     if ts is None:
         return False
     return (now_epoch - ts) <= minutes * 60
+
+
+CATEGORY_EMOJI = {
+    "build": "🛠",
+    "deploy": "🚀",
+    "research": "🔎",
+    "design": "🎨",
+    "chore": "🧹",
+    "handoff": "🤝",
+    "idle-noise": "💤",
+}
+
+# repo basename → project tags (extend as the fleet grows)
+REPO_PROJECT_TAGS = {
+    "taqat-academy": ["brightgaza"],
+    "my-child-nest": ["brightteam"],
+    "radx": ["radx"],
+    "radx-swift": ["radx"],
+    "aqaddoura.com-private": ["aqaddoura"],
+    "aqaddoura-mcp-authenticator": ["aqaddoura"],
+    "aqaddoura-os": ["aqos"],
+    "pure-skill-suite": ["aqos"],
+}
+
+ACRONYMS = {
+    "seo": "SEO", "og": "OG", "pr": "PR", "prs": "PRs", "ui": "UI",
+    "ux": "UX", "api": "API", "cors": "CORS", "mcp": "MCP", "os": "OS",
+    "wa": "WA", "ig": "IG", "db": "DB",
+}
+
+
+def branch_kind(branch):
+    b = (branch or "").lower()
+    if b.startswith(("feat/", "feature/")):
+        return "feat"
+    if b.startswith(("fix/", "bugfix/", "hotfix/")):
+        return "fix"
+    if b.startswith(("chore/", "refactor/")):
+        return "chore"
+    if b.startswith(("deploy/", "release/")):
+        return "deploy"
+    if b.startswith(("design/", "ux/")):
+        return "design"
+    return "other"
+
+
+def branch_intent(branch):
+    if not branch:
+        return ""
+    slug = branch.split("/", 1)[1] if "/" in branch else branch
+    words = slug.replace("-", " ").replace("_", " ").split()
+    return " ".join(ACRONYMS.get(w.lower(), w) for w in words).strip()
+
+
+def category_for(row):
+    key = row.get("session_key") or ""
+    title = row.get("title") or ""
+    if key.startswith("handoff") or title.startswith("HANDOFF"):
+        return "handoff"
+    kind = branch_kind(row.get("branch"))
+    if kind == "deploy":
+        return "deploy"
+    if kind == "design":
+        return "design"
+    if kind in ("fix", "chore"):
+        return "chore"
+    if kind == "feat":
+        return "build"
+    if row.get("repo"):
+        return "build"
+    return "idle-noise"
+
+
+def repo_tags(row):
+    tags = []
+    repo = row.get("repo")
+    if repo:
+        tags += REPO_PROJECT_TAGS.get(repo, [])
+    machine = row.get("machine")
+    if machine and machine != "here":
+        tags.append(machine)
+    kind = branch_kind(row.get("branch"))
+    if kind != "other":
+        tags.append(kind)
+    seen, out = set(), []
+    for t in tags:
+        if t not in seen:
+            seen.add(t)
+            out.append(t)
+    return out
+
+
+def make_title(category, label):
+    return f"{CATEGORY_EMOJI[category]} {label}".strip()

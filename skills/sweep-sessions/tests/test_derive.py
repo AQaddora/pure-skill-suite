@@ -39,5 +39,37 @@ class TestCore(unittest.TestCase):
         self.assertFalse(derive.is_fresh({"last_seen": at(-3600)}, NOW))     # 1h ago
 
 
+class TestNaming(unittest.TestCase):
+    def test_branch_kind(self):
+        self.assertEqual(derive.branch_kind("feat/seo-og-metadata"), "feat")
+        self.assertEqual(derive.branch_kind("fix/login"), "fix")
+        self.assertEqual(derive.branch_kind("deploy/pipeline"), "deploy")
+        self.assertEqual(derive.branch_kind("staging"), "other")
+        self.assertEqual(derive.branch_kind(None), "other")
+
+    def test_branch_intent(self):
+        self.assertEqual(derive.branch_intent("feat/seo-og-metadata"), "SEO OG metadata")
+        self.assertEqual(derive.branch_intent("fix/ops-cors"), "ops CORS")
+        self.assertEqual(derive.branch_intent("staging"), "staging")
+        self.assertEqual(derive.branch_intent(None), "")
+
+    def test_category_for(self):
+        self.assertEqual(derive.category_for({"branch": "feat/x", "repo": "radx"}), "build")
+        self.assertEqual(derive.category_for({"branch": "deploy/x", "repo": "radx"}), "deploy")
+        self.assertEqual(derive.category_for({"branch": "fix/x", "repo": "radx"}), "chore")
+        self.assertEqual(derive.category_for({"branch": "main", "repo": "radx"}), "build")
+        self.assertEqual(derive.category_for({"session_key": "handoff-x", "title": "HANDOFF: x"}), "handoff")
+        self.assertEqual(derive.category_for({"repo": None, "branch": None}), "idle-noise")
+
+    def test_repo_tags(self):
+        tags = derive.repo_tags({"repo": "taqat-academy", "machine": "here", "branch": "feat/x"})
+        self.assertEqual(tags, ["brightgaza", "feat"])
+        tags2 = derive.repo_tags({"repo": "radx-swift", "machine": "fatmac", "branch": "main"})
+        self.assertEqual(tags2, ["radx", "fatmac"])
+
+    def test_make_title(self):
+        self.assertEqual(derive.make_title("build", "radx · explore tab"), "🛠 radx · explore tab")
+
+
 if __name__ == "__main__":
     unittest.main()
