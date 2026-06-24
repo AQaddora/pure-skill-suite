@@ -136,6 +136,14 @@ class TestDeriveRow(unittest.TestCase):
         self.assertEqual(len(out["plans"]), 1)
         self.assertEqual(out["plans"][0]["action"], "skip")
 
+    def test_derive_all_skips_keyless_rows(self):
+        payload = {"sessions": [
+            {"session_key": "maestro-x", "title": "good", "last_seen": at(-60), "status": "active"},
+            {"title": "no-key-row", "last_seen": at(-60), "status": "active"},  # no session_key
+        ]}
+        out = derive.derive_all(payload, NOW)
+        self.assertEqual(len(out["plans"]), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

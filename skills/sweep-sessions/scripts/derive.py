@@ -147,7 +147,9 @@ def _tags_line(tags):
 
 
 def derive_row(row, now_epoch):
-    key = row.get("session_key")
+    key = row.get("session_key") or ""
+    if not key:
+        return None  # skip rows without a session_key
     old_title = row.get("title")
     status_now = row.get("status")
     active_and_stale = status_now == "active" and is_stale(row, now_epoch)
@@ -196,7 +198,7 @@ def derive_row(row, now_epoch):
 
 def derive_all(payload, now_epoch):
     sessions = (payload or {}).get("sessions") or []
-    return {"plans": [derive_row(r, now_epoch) for r in sessions]}
+    return {"plans": [p for p in (derive_row(r, now_epoch) for r in sessions) if p is not None]}
 
 
 def _main(argv):
