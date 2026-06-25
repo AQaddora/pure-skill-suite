@@ -1,0 +1,100 @@
+[
+  {
+    "name": "radx",
+    "repos": ["radx-agent", "radx-admin", "radx-swift"],
+    "staging_url": "https://staging-agent.radx.ae",
+    "staging_admin_url": "https://staging-control.radx.ae",
+    "prod_url": "https://agent.radx.ae",
+    "prod_admin_url": "https://control.radx.ae",
+    "prod_box": null,
+    "wa_contacts": {
+      "client": [],
+      "devs": ["Omri"]
+    },
+    "board_id": null,
+    "_notes": {
+      "prod_box": "TODO: fill SSH host alias for radx prod box (needed for live prod-log dimension)",
+      "wa_contacts.client": "TODO: add radx client WA contact(s)",
+      "board_id": "TODO: fill AQ Backoffice board_id for radx once /api/internal/board endpoint exists",
+      "known_signatures": [
+        "agent spoke the clock/time",
+        "wrong-neighbourhood guess",
+        "route/travel-mode miss",
+        "stale Live Activity not closing"
+      ],
+      "reference_findings": [
+        "PR #62 (sprint/dispatch-radx-agent-to-live--74): open, targets main (GitFlow violation) — livekit pin fix not on dev/staging",
+        "radx-admin staging deploy RED: couldn't find remote ref dev (box-side git)",
+        "radx-agent tools.py:691 navigate() lacks bicycle travel_mode (only walk|drive|transit)",
+        "agent.py:326 reverse-geocodes live GPS but no geofence match vs saved places",
+        "radx-swift LiveKitCallService.swift .end() only on clean path (stale on abnormal disconnect)",
+        "RadxCallLiveActivity.swift shows call-duration timer — Ahmed wants removed (keep nav only)"
+      ]
+    }
+  },
+  {
+    "name": "taqat-academy",
+    "repos": ["taqat-academy"],
+    "staging_url": null,
+    "prod_url": null,
+    "prod_box": null,
+    "wa_contacts": {
+      "client": [],
+      "devs": []
+    },
+    "board_id": null,
+    "_notes": {
+      "staging_url": "TODO: fill taqat-academy staging URL",
+      "prod_url": "TODO: fill taqat-academy prod URL",
+      "wa_contacts": "TODO: add taqat-academy client + dev contacts"
+    }
+  },
+  {
+    "name": "aqaddoura.com",
+    "repos": ["aqaddoura.com-private"],
+    "staging_url": null,
+    "prod_url": "https://aqaddoura.com",
+    "prod_box": null,
+    "wa_contacts": {
+      "client": [],
+      "devs": []
+    },
+    "board_id": null,
+    "_notes": {
+      "staging_url": "TODO: fill aqaddoura.com staging URL if one exists",
+      "prod_box": "TODO: fill SSH host alias for the aqaddoura.com droplet"
+    }
+  },
+  {
+    "name": "my-child-nest",
+    "repos": ["my-child-nest"],
+    "staging_url": null,
+    "prod_url": null,
+    "prod_box": null,
+    "wa_contacts": {
+      "client": [],
+      "devs": []
+    },
+    "board_id": null,
+    "_notes": {
+      "repos": "TODO: verify repo name(s) for my-child-nest",
+      "prod_url": "TODO: fill my-child-nest prod URL"
+    }
+  },
+  {
+    "name": "gaza-delivery",
+    "repos": ["talabat-gaza"],
+    "staging_url": null,
+    "prod_url": null,
+    "prod_box": null,
+    "wa_contacts": {
+      "client": [],
+      "devs": []
+    },
+    "board_id": null,
+    "_notes": {
+      "repos": "TODO: confirm all repos for gaza-delivery (found talabat-gaza locally)",
+      "prod_url": "TODO: fill gaza-delivery prod URL"
+    }
+  }
+]

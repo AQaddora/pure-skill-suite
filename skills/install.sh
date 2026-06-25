@@ -12,7 +12,7 @@
 #      so Cursor / Copilot / Codex / Gemini / Windsurf all read the same memory
 #   5. Verifies everything
 #
-# The 13 skills:
+# The 14 skills:
 #   doctrine-keeper      → write head (the memory bus)
 #   prime                → P of PURE — build a primer from your stack + doctrine
 #   understand           → U of PURE — clarify scope before code
@@ -26,6 +26,7 @@
 #   status-beacon        → mid-flight progress logging for long runs
 #   3d-modeler           → 3D interior models from photos into Mapbox GL
 #   montage-creator      → dynamic video montages for social distribution
+#   daily-sweeper        → fleet-cron morning sweep: PRs, CI, WA, staging, board
 #
 # Run from the skills/ folder:
 #   ./install.sh                        # default install
@@ -72,6 +73,7 @@ SKILLS=(
     "status-beacon"
     "3d-modeler"
     "montage-creator"
+    "daily-sweeper"
 )
 
 # ─── Colors (terminal-aware) ─────────────────────────────────────────────────
@@ -115,7 +117,7 @@ for skill in "${SKILLS[@]}"; do
         exit 1
     fi
 done
-ok "All 8 skills present in $SKILLS_DIR"
+ok "All 14 skills present in $SKILLS_DIR"
 
 # ─── Step 2: Bootstrap the doctrine ──────────────────────────────────────────
 section "2/5 · Bootstrap your AI Doctrine"
@@ -133,7 +135,7 @@ else
 fi
 
 # ─── Step 3: Install all skills ──────────────────────────────────────────────
-section "3/5 · Install 13 skills into Claude (~/.claude/skills/)"
+section "3/5 · Install 14 skills into Claude (~/.claude/skills/)"
 
 mkdir -p "$CLAUDE_SKILLS_HOME"
 
@@ -216,7 +218,7 @@ ${BOLD}${GREEN}━━━ Installation complete ━━━${RESET}
 
 ${BOLD}What you have now:${RESET}
   • A personal AI Doctrine at:  ${BLUE}$DOCTRINE_PATH${RESET}
-  • All 8 skills installed in:  ${BLUE}$CLAUDE_SKILLS_HOME${RESET}
+  • All 14 skills installed in:  ${BLUE}$CLAUDE_SKILLS_HOME${RESET}
   • A memory bus that travels with you across every AI coding tool
 
 ${BOLD}The PURE Loop (your new operating system):${RESET}
@@ -228,6 +230,7 @@ ${BOLD}The PURE Loop (your new operating system):${RESET}
   ${DIM} ${RESET}  pure-orchestrator  runs the full P→U→R→E loop end-to-end
   ${DIM} ${RESET}  doctrine-keeper    writes every learning back to your doctrine
   ${DIM} ${RESET}  handoff            migrates a long session to a fresh chat cleanly
+  ${DIM} ${RESET}  daily-sweeper      fleet-cron morning sweep across all projects
 
 ${BOLD}First time? Try this:${RESET}
 
