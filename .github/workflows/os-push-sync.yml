@@ -1,0 +1,30 @@
+# OS push-sync caller — add this to .github/workflows/ in any repo under AQaddora/
+# to auto-report pushes to aqaddoura-os and the spine.
+#
+# One-time setup per repo:
+#   gh secret set OS_REPORT_TOKEN --body "<PAT>" --repo AQaddora/<repo>
+#   gh secret set SPINE_TOKEN     --body "<token>" --repo AQaddora/<repo>
+#   gh secret set SPINE_URL       --body "https://os.aqaddoura.com" --repo AQaddora/<repo>
+# Or set these at org level once:
+#   gh secret set OS_REPORT_TOKEN --org AQaddora --visibility all
+name: OS Push Sync
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  os-push-report:
+    name: Report push to OS
+    uses: AQaddora/aqaddoura-os/.github/workflows/push-report.yml@main
+    with:
+      repo: ${{ github.repository }}
+      branch: ${{ github.ref_name }}
+      commit_sha: ${{ github.sha }}
+      commit_message: ${{ github.event.head_commit.message }}
+      pushed_by: ${{ github.event.head_commit.author.name }}
+    secrets:
+      OS_REPORT_TOKEN: ${{ secrets.OS_REPORT_TOKEN }}
+      SPINE_TOKEN: ${{ secrets.SPINE_TOKEN }}
+      SPINE_URL: ${{ secrets.SPINE_URL }}
