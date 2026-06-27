@@ -1,0 +1,54 @@
+name: Notify AQaddoura OS — Push Event
+
+# Fires on every push to every branch in this repo.
+# Dispatches a repository_dispatch event to aqaddoura-os, which runs the
+# central push-sweep workflow (collect reports → sync spine → transfer fatmac → notify).
+on:
+  push:
+    branches: ['**']
+
+jobs:
+  notify:
+    name: Dispatch push event to aqaddoura-os
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Send repository_dispatch to aqaddoura-os
+        env:
+          AQOS_DISPATCH_TOKEN: ${{ secrets.AQOS_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$AQOS_DISPATCH_TOKEN" ]; then
+            echo "::warning::AQOS_DISPATCH_TOKEN not set — cannot dispatch to aqaddoura-os"
+            exit 0
+          fi
+
+          PAYLOAD=$(python3 -c "
+import json
+d = {
+  'event_type': 'worktree-push',
+  'client_payload': {
+    'repo': '${{ github.repository }}',
+    'branch': '${{ github.ref_name }}',
+    'commit': '${{ github.sha }}',
+    'pusher': '${{ github.actor }}',
+    'ts': '$(date -u +%Y-%m-%dT%H:%M:%SZ)'
+  }
+}
+print(json.dumps(d))
+")
+
+          HTTP=$(curl -sS -o /tmp/dispatch_resp.json -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer $AQOS_DISPATCH_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD" \
+            "https://api.github.com/repos/AQaddora/aqaddoura-os/dispatches")
+
+          if [ "$HTTP" = "204" ]; then
+            echo "Dispatched push event to aqaddoura-os (204 No Content)"
+          else
+            echo "::warning::Dispatch returned HTTP $HTTP"
+            cat /tmp/dispatch_resp.json || true
+          fi
