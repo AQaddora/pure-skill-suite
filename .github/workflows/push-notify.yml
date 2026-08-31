@@ -10,7 +10,7 @@ on:
 jobs:
   notify:
     name: Dispatch push event to aqaddoura-os
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, qa]
     timeout-minutes: 3
 
     steps:
