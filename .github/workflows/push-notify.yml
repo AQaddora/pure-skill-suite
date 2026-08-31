@@ -24,19 +24,19 @@ jobs:
           fi
 
           PAYLOAD=$(python3 -c "
-import json
-d = {
-  'event_type': 'worktree-push',
-  'client_payload': {
-    'repo': '${{ github.repository }}',
-    'branch': '${{ github.ref_name }}',
-    'commit': '${{ github.sha }}',
-    'pusher': '${{ github.actor }}',
-    'ts': '$(date -u +%Y-%m-%dT%H:%M:%SZ)'
-  }
-}
-print(json.dumps(d))
-")
+          import json
+          d = {
+            'event_type': 'worktree-push',
+            'client_payload': {
+              'repo': '${{ github.repository }}',
+              'branch': '${{ github.ref_name }}',
+              'commit': '${{ github.sha }}',
+              'pusher': '${{ github.actor }}',
+              'ts': '$(date -u +%Y-%m-%dT%H:%M:%SZ)'
+            }
+          }
+          print(json.dumps(d))
+          ")
 
           HTTP=$(curl -sS -o /tmp/dispatch_resp.json -w "%{http_code}" \
             -X POST \
